@@ -22,9 +22,12 @@ export default function AuthForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      isLogin
-        ? await login(email, password)
-        : await register(name, email, password);
+      if (isLogin) {
+        await login(email, password);
+      } else {
+        await register(name, email, password);
+      }
+
       router.push("/");
     } catch (err) {
       alert((err as Error).message);

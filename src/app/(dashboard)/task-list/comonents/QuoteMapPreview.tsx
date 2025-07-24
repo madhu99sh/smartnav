@@ -1,14 +1,25 @@
 "use client";
 import { MapContainer, TileLayer, Polygon } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import { ShapeData } from "../../context/ShapeContext";
 
-export default function QuoteMapPreview({ shape, onDelete, onView }: { shape: any, onDelete?: () => void, onView?: () => void }) {
+export default function QuoteMapPreview({
+  shape,
+  onDelete,
+  onView,
+}: {
+  shape: ShapeData;
+  onDelete?: () => void;
+  onView?: () => void;
+}) {
   const parsed = typeof shape === "string" ? JSON.parse(shape) : shape;
 
   // Convert GeoJSON coordinates to Leaflet LatLng format
-  const coordinates = parsed?.geometry?.coordinates?.[0]?.map(
-    ([lng, lat]: [number, number]) => [lat, lng]
-  ) || [];
+  const coordinates =
+    parsed?.geometry?.coordinates?.[0]?.map(([lng, lat]: [number, number]) => [
+      lat,
+      lng,
+    ]) || [];
 
   return (
     <div className="relative group w-full h-40">
@@ -23,13 +34,18 @@ export default function QuoteMapPreview({ shape, onDelete, onView }: { shape: an
         style={{ pointerEvents: "none", borderRadius: "0.25rem" }}
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        {coordinates.length > 0 && <Polygon positions={coordinates} pathOptions={{ color: "#f97316" }} />}
+        {coordinates.length > 0 && (
+          <Polygon positions={coordinates} pathOptions={{ color: "#f97316" }} />
+        )}
       </MapContainer>
       {(onDelete || onView) && (
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm z-10">
           {onDelete && (
             <button
-              onClick={e => { e.stopPropagation(); onDelete(); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete();
+              }}
               className="mx-1 px-2 py-1 rounded bg-red-500 text-white text-xs font-bold hover:bg-red-600 shadow"
             >
               DELETE
@@ -37,7 +53,10 @@ export default function QuoteMapPreview({ shape, onDelete, onView }: { shape: an
           )}
           {onView && (
             <button
-              onClick={e => { e.stopPropagation(); onView(); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onView();
+              }}
               className="mx-1 px-2 py-1 rounded bg-orange-500 text-white text-xs font-bold hover:bg-orange-600 shadow"
             >
               VIEW

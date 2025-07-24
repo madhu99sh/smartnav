@@ -56,7 +56,6 @@ export default function MyQuotesPage() {
               key={quote.id}
               className="bg-white rounded shadow border overflow-hidden"
             >
-              
               <div className="p-4">
                 <div className="flex justify-between items-center mb-2">
                   <h3 className="font-semibold">{quote.title}</h3>
@@ -77,8 +76,8 @@ export default function MyQuotesPage() {
                   )}
                 </div>
                 <div className="w-full h-40 bg-gray-300 flex items-center justify-center text-gray-600">
-                  <QuoteMapPreview 
-                    shape={quote.shape} 
+                  <QuoteMapPreview
+                    shape={quote.shape}
                     onDelete={() => handleDelete(quote.id)}
                     onView={() => router.push(`/new-task?id=${quote.id}`)}
                   />
@@ -89,5 +88,5 @@ export default function MyQuotesPage() {
         </div>
       )}
     </main>
-  );  
+  );
 }

@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export function ServicesPage() {
+function ServicesPage() {
   return (
     <main className="bg-black min-h-screen w-full pb-10">
       {/* Hero Section */}

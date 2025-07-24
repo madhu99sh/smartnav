@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export function TechnologyPage() {
+function TechnologyPage() {
   return (
     <main className="bg-black min-h-screen w-full pb-10">
       {/* Hero Section */}
@@ -39,7 +39,7 @@ export function TechnologyPage() {
               The Onboard Brain: The ARGUS Inference Engine
             </div>
             <div className="w-full max-w-xs sm:max-w-md md:w-[507px] justify-center text-white text-base sm:text-lg font-normal font-['Space_Grotesk'] leading-relaxed sm:leading-loose">
-              ARGUS's core innovation lies in its physics-based machine learning
+              ARGUSs core innovation lies in its physics-based machine learning
               approach. We train our models in a simulated environment that
               accurately replicates real-world physics, including aerodynamics,
               weather conditions, and sensor behavior. This allows our AI to

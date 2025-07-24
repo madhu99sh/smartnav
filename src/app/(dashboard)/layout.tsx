@@ -1,56 +1,67 @@
-// src/app/(dashboard)/layout.tsx
 "use client";
 
 import Link from "next/link";
 import "@/app/globals.css";
 import GetQuoteComponent from "./new-task/components/GetQuoteComponent";
 import { usePathname, useSearchParams } from "next/navigation";
-
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../libs/firebase";
 import { ShapeContext } from "./context/ShapeContext";
 import useAuth from "../../hooks/useAuth";
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const pathname = usePathname(); // ✅ current route
+// Import QuoteStatus type and use it in QuoteData
+import type { QuoteStatus } from "./new-task/components/GetQuoteComponent";
+export type QuoteData = {
+  id: string;
+  shape: string;
+  title: string;
+  description: string;
+  status: QuoteStatus;
+  // Add other fields as needed
+};
+import type { ShapeData } from "./context/ShapeContext";
+
+// Create a separate component for the search params logic
+function DashboardContent({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const quoteId = searchParams.get("id");
   const isNewTask = pathname.includes("/new-task");
-  const [formData, setFormData] = useState<any | null>(null);
-  const [shapeData, setShapeData] = useState<any | null>(null);
-  const [loading, setLoading] = useState<boolean>(!!quoteId); // true if quoteId exists
+  const [formData, setFormData] = useState<QuoteData | null>(null);
+  const [shapeData, setShapeData] = useState<ShapeData | null>(null);
+  const [loading, setLoading] = useState<boolean>(!!quoteId);
 
   const { user } = useAuth();
+
   useEffect(() => {
-    if (!quoteId) {
+    if (!quoteId || !user) {
       setFormData(null);
+      setShapeData(null);
+      setLoading(false);
       return;
     }
 
     const fetchQuote = async () => {
-      if (!user) return;
       try {
         const quoteRef = doc(db, "users", user.uid, "quotes", quoteId);
         const docSnap = await getDoc(quoteRef);
         if (docSnap.exists()) {
-          const data: any = docSnap.data();
+          const data = docSnap.data() as QuoteData;
           setFormData(data);
-          setShapeData(data.shape); // ✅ store for GetQuoteComponent
+          setShapeData(JSON.parse(data.shape));
+        } else {
+          console.warn("No quote found for id:", quoteId);
         }
       } catch (err) {
         console.error("Error loading quote:", err);
       } finally {
-        setLoading(false); // ✅ ready to render children
+        setLoading(false);
       }
     };
 
     fetchQuote();
-  }, [quoteId]);
+  }, [quoteId, user]);
 
   const linkClasses = (isActive: boolean) =>
     `flex items-center gap-2 font-semibold px-4 py-2 mb-2 rounded 
@@ -64,7 +75,6 @@ export default function DashboardLayout({
     <div className="flex h-screen">
       {/* Sidebar */}
       <aside className="hidden lg:flex w-80 p-4 border-r bg-white flex-col justify-between h-screen">
-        {/* Top navigation */}
         <div>
           <Link href="/" className={linkClasses(pathname === "/")}>
             Dashboard
@@ -77,19 +87,40 @@ export default function DashboardLayout({
           </Link>
         </div>
 
-        {/* Bottom only on /new-task */}
         <div className="mt-4">
-          {isNewTask && <GetQuoteComponent data={formData} quoteId={quoteId} />}
+          {isNewTask && (
+            <GetQuoteComponent
+              data={formData ?? undefined}
+              quoteId={quoteId ?? undefined}
+            />
+          )}
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col bg-gray-100 overflow-hidden">
-        {!loading && (
-          <ShapeContext.Provider value={{ shapeData, setShapeData }}>
-            {!loading ? children : null}
-          </ShapeContext.Provider>
-        )}
-      </main>
+      {!loading && shapeData !== null && (
+        <ShapeContext.Provider value={{ shapeData, setShapeData }}>
+          {children}
+        </ShapeContext.Provider>
+      )}
     </div>
+  );
+}
+
+// Main layout component with Suspense wrapper
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex h-screen items-center justify-center">
+          Loading...
+        </div>
+      }
+    >
+      <DashboardContent>{children}</DashboardContent>
+    </Suspense>
   );
 }

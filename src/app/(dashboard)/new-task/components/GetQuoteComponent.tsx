@@ -1,17 +1,24 @@
 "use client";
 import { useEffect, useState } from "react";
-import { doc, setDoc, addDoc, collection } from "firebase/firestore";
-import { db } from "../../../../libs/firebase";
-import useAuth from "../../../../hooks/useAuth";
 import { useRouter } from "next/navigation";
+import useAuth from "../../../../hooks/useAuth";
 import useQuotes from "../../../../hooks/quotes";
+
+export type QuoteStatus = "draft" | "pending";
+
+type QuoteData = {
+  title: string;
+  description: string;
+  shape: string;
+  status: QuoteStatus;
+};
 
 export default function GetQuoteComponent({
   data,
   quoteId,
 }: {
-  data?: any;
-  quoteId?: any;
+  data?: QuoteData;
+  quoteId?: string;
 }) {
   const { addOrUpdateQuote } = useQuotes();
   const [title, setTitle] = useState("");
@@ -20,6 +27,7 @@ export default function GetQuoteComponent({
   const { user } = useAuth();
   const router = useRouter();
 
+  // Load existing quote data into form
   useEffect(() => {
     if (data) {
       console.log("Preloaded shape:", data);
@@ -33,32 +41,32 @@ export default function GetQuoteComponent({
     }
   }, [data]);
 
+  // Polling to check if shape is drawn
   useEffect(() => {
     const interval = setInterval(() => {
-      const state = (window as any).__drawState;
-      if (state?.hasShape) {
-        setHasShape(true);
-      } else {
-        setHasShape(false);
-      }
-    }, 500); // Poll every 500ms
+      setHasShape(!!window.__drawState?.hasShape);
+    }, 500);
 
     return () => clearInterval(interval);
   }, []);
 
-  const handleSubmit = async (status: "draft" | "pending") => {
-    const shape = (window as any).__drawState?.shape;
+  const handleSubmit = async (status: QuoteStatus) => {
+    const shape = window.__drawState?.shape;
+
     if (!shape || !title.trim()) {
       alert("Please draw a shape and enter a title.");
       return;
     }
 
-    try {
-      const userId = user?.uid;
-      console.log("User:---", userId);
+    if (!user?.uid) {
+      alert("User not authenticated.");
+      return;
+    }
 
+    try {
       await addOrUpdateQuote({
         quote: {
+          id: quoteId || "",
           title,
           description: desc,
           shape: JSON.stringify(shape),
@@ -73,9 +81,11 @@ export default function GetQuoteComponent({
           status === "draft" ? "saved as draft" : "submitted"
         } successfully!`
       );
+
+      // Reset form
       setTitle("");
       setDesc("");
-      (window as any).__drawState = null;
+      window.__drawState = null;
       router.push("/task-list");
     } catch (err) {
       console.error(err);
@@ -116,9 +126,14 @@ export default function GetQuoteComponent({
         >
           Draft
         </button>
-        <button className="flex-1 border px-3 py-2 rounded font-bold text-gray-600 hover:bg-gray-100">
+
+        <button
+          className="flex-1 border px-3 py-2 rounded font-bold text-gray-600 hover:bg-gray-100"
+          onClick={() => router.push("/task-list")}
+        >
           CANCEL
         </button>
+
         <button
           disabled={!hasShape}
           onClick={() => handleSubmit("pending")}

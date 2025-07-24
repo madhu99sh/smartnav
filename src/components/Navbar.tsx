@@ -5,13 +5,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import useAuth from "../hooks/useAuth";
-import { useRouter } from "next/navigation";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const { user, logout } = useAuth();
-  const router = useRouter();
 
   const navItems = [
     { name: "Home", href: "/" },
@@ -62,15 +60,15 @@ const Navbar = () => {
             ) : (
               <>
                 <Link href="/new-task">
-                  <button
-                    className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg text-sm font-medium transition-colors duration-200 mr-2"
-                  >
+                  <button className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg text-sm font-medium transition-colors duration-200 mr-2">
                     + New Task
                   </button>
                 </Link>
                 <button
                   onClick={() => {
-                    const confirmed = window.confirm("Are you sure you want to log out?");
+                    const confirmed = window.confirm(
+                      "Are you sure you want to log out?"
+                    );
                     if (confirmed) logout();
                   }}
                   className="bg-gray-800 hover:bg-gray-700 text-white px-6 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
@@ -164,7 +162,9 @@ const Navbar = () => {
                   className="block w-full px-3 py-2 text-base font-medium bg-gray-800 hover:bg-gray-700 text-white rounded-lg mx-3 mt-2 text-center transition-colors duration-200"
                   onClick={() => {
                     setIsMenuOpen(false);
-                    const confirmed = window.confirm("Are you sure you want to log out?");
+                    const confirmed = window.confirm(
+                      "Are you sure you want to log out?"
+                    );
                     if (confirmed) logout();
                   }}
                 >

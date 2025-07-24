@@ -14,7 +14,7 @@ function AiLabsPage() {
             Research & Innovation
           </div>
           <div className="text-center justify-start text-white text-base sm:text-xl md:text-2xl font-normal font-['Space_Grotesk'] ">
-            At SmartNav, we're dedicated to tackling the core challenges in
+            At SmartNav, were dedicated to tackling the core challenges in
             autonomous systems. Our research focuses on advancing the
             state-of-the-art in AI for flight, ensuring safety, efficiency, and
             adaptability in complex environments.
@@ -43,7 +43,7 @@ function AiLabsPage() {
               At SmartNav, our research is driven by a commitment to solving
               fundamental challenges in autonomy. We believe in a collaborative
               approach, working closely with industry partners and academic
-              institutions to push the boundaries of what's possible in AI for
+              institutions to push the boundaries of whats possible in AI for
               flight. Our focus is on developing practical, real-world solutions
               that enhance safety, efficiency, and adaptability in complex
               environments.
@@ -66,7 +66,7 @@ function AiLabsPage() {
         </h3>
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-stretch">
           <div className="bg-zinc-800 rounded-lg px-4 sm:px-6 py-4 sm:py-5 flex-1 min-w-[180px] sm:min-w-[220px] max-w-xs mx-auto flex items-center text-white font-semibold text-sm sm:text-base gap-3 sm:gap-4">
-            <img
+            <Image
               className="w-5 h-5 sm:w-6 sm:h-6"
               src="/images/file.svg"
               alt="file"
@@ -74,7 +74,7 @@ function AiLabsPage() {
             <div>Autonomous Flight Control Systems: A Comprehensive Review</div>
           </div>
           <div className="bg-zinc-800 rounded-lg px-4 sm:px-6 py-4 sm:py-5 flex-1 min-w-[180px] sm:min-w-[220px] max-w-xs mx-auto flex items-center text-white font-semibold text-sm sm:text-base gap-3 sm:gap-4">
-            <img
+            <Image
               className="w-5 h-5 sm:w-6 sm:h-6"
               src="/images/file.svg"
               alt="file"
@@ -82,7 +82,7 @@ function AiLabsPage() {
             Safety-Critical AI in Aviation: Challenges and Solutions
           </div>
           <div className="bg-zinc-800 rounded-lg px-4 sm:px-6 py-4 sm:py-5 flex-1 min-w-[180px] sm:min-w-[220px] max-w-xs mx-auto flex items-center text-white font-semibold text-sm sm:text-base gap-3 sm:gap-4">
-            <img
+            <Image
               className="w-5 h-5 sm:w-6 sm:h-6"
               src="/images/file.svg"
               alt="file"
@@ -198,7 +198,7 @@ function AiLabsPage() {
                 Revolutionizing Air Traffic Management with AI
               </p>
               <p className="text-gray-200 text-xs sm:text-sm flex-1">
-                Explore how SmartNav's AI is transforming air traffic control,
+                Explore how SmartNavs AI is transforming air traffic control,
                 enhancing safety and efficiency in airspace management.
               </p>
             </div>
@@ -221,7 +221,7 @@ function AiLabsPage() {
                 The Future of Autonomous Flight: Navigating Complex Environments
               </p>
               <p className="text-gray-200 text-xs sm:text-sm flex-1">
-                Discover how SmartNav's advanced AI algorithms enable autonomous
+                Discover how SmartNavs advanced AI algorithms enable autonomous
                 aircraft to navigate and adapt to dynamic and challenging
                 environments.
               </p>
@@ -245,7 +245,7 @@ function AiLabsPage() {
                 Ensuring Safety in AI-Driven Autonomous Systems
               </p>
               <p className="text-gray-200 text-xs sm:text-sm flex-1">
-                Learn about SmartNav's rigorous approach to safety in AI,
+                Learn about SmartNavs rigorous approach to safety in AI,
                 including testing, validation, and certification for autonomous
                 flight systems.
               </p>
