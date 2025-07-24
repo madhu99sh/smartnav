@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export function AiLabsPage() {
+function AiLabsPage() {
   return (
     <main className="bg-black min-h-screen w-full pb-10">
       {/* Hero Section */}
@@ -66,15 +66,27 @@ export function AiLabsPage() {
         </h3>
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-stretch">
           <div className="bg-zinc-800 rounded-lg px-4 sm:px-6 py-4 sm:py-5 flex-1 min-w-[180px] sm:min-w-[220px] max-w-xs mx-auto flex items-center text-white font-semibold text-sm sm:text-base gap-3 sm:gap-4">
-            <img className="w-5 h-5 sm:w-6 sm:h-6" src="/images/file.svg" alt="file" />
+            <img
+              className="w-5 h-5 sm:w-6 sm:h-6"
+              src="/images/file.svg"
+              alt="file"
+            />
             <div>Autonomous Flight Control Systems: A Comprehensive Review</div>
           </div>
           <div className="bg-zinc-800 rounded-lg px-4 sm:px-6 py-4 sm:py-5 flex-1 min-w-[180px] sm:min-w-[220px] max-w-xs mx-auto flex items-center text-white font-semibold text-sm sm:text-base gap-3 sm:gap-4">
-            <img className="w-5 h-5 sm:w-6 sm:h-6" src="/images/file.svg" alt="file" />
+            <img
+              className="w-5 h-5 sm:w-6 sm:h-6"
+              src="/images/file.svg"
+              alt="file"
+            />
             Safety-Critical AI in Aviation: Challenges and Solutions
           </div>
           <div className="bg-zinc-800 rounded-lg px-4 sm:px-6 py-4 sm:py-5 flex-1 min-w-[180px] sm:min-w-[220px] max-w-xs mx-auto flex items-center text-white font-semibold text-sm sm:text-base gap-3 sm:gap-4">
-            <img className="w-5 h-5 sm:w-6 sm:h-6" src="/images/file.svg" alt="file" />
+            <img
+              className="w-5 h-5 sm:w-6 sm:h-6"
+              src="/images/file.svg"
+              alt="file"
+            />
             Adaptive Path Planning for Unmanned Aerial Vehicles
           </div>
         </div>
@@ -226,7 +238,9 @@ export function AiLabsPage() {
               />
             </div>
             <div className="p-4 sm:p-5 flex-1 flex flex-col gap-2 sm:gap-4">
-              <h4 className="text-white font-bold text-sm sm:text-md mb-1">AI Safety</h4>
+              <h4 className="text-white font-bold text-sm sm:text-md mb-1">
+                AI Safety
+              </h4>
               <p className="text-orange-500 font-semibold text-sm sm:text-md mb-1">
                 Ensuring Safety in AI-Driven Autonomous Systems
               </p>
