@@ -1,5 +1,5 @@
+// src/app/(dashboard)/layout.tsx
 "use client";
-
 import Link from "next/link";
 import "@/app/globals.css";
 import GetQuoteComponent from "./new-task/components/GetQuoteComponent";
@@ -7,22 +7,12 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../libs/firebase";
-import { ShapeContext } from "./context/ShapeContext";
+import { ShapeContext, ShapeData } from "./context/ShapeContext";
 import useAuth from "../../hooks/useAuth";
+import { QuoteData } from "@/hooks/quotes";
+import { QuoteStatus } from "./new-task/components/GetQuoteComponent";
 
-// Import QuoteStatus type and use it in QuoteData
-import type { QuoteStatus } from "./new-task/components/GetQuoteComponent";
-export type QuoteData = {
-  id: string;
-  shape: string;
-  title: string;
-  description: string;
-  status: QuoteStatus;
-  // Add other fields as needed
-};
-import type { ShapeData } from "./context/ShapeContext";
-
-// Create a separate component for the search params logic
+// Separate component that uses useSearchParams
 function DashboardContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -31,27 +21,36 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
   const [formData, setFormData] = useState<QuoteData | null>(null);
   const [shapeData, setShapeData] = useState<ShapeData | null>(null);
   const [loading, setLoading] = useState<boolean>(!!quoteId);
-
   const { user } = useAuth();
 
   useEffect(() => {
-    if (!quoteId || !user) {
+    if (!quoteId) {
       setFormData(null);
-      setShapeData(null);
       setLoading(false);
       return;
     }
 
     const fetchQuote = async () => {
+      if (!user) return;
       try {
         const quoteRef = doc(db, "users", user.uid, "quotes", quoteId);
         const docSnap = await getDoc(quoteRef);
         if (docSnap.exists()) {
-          const data = docSnap.data() as QuoteData;
-          setFormData(data);
-          setShapeData(JSON.parse(data.shape));
-        } else {
-          console.warn("No quote found for id:", quoteId);
+          const data = docSnap.data();
+          if (data) {
+            const quoteData: QuoteData = {
+              id: quoteId,
+              shape: data.shape,
+              title: data.title,
+              description: data.description,
+              status: data.status,
+              createdAt: data.createdAt,
+              updatedAt: data.updatedAt ?? "",
+              ...data,
+            };
+            setFormData(quoteData);
+            setShapeData(quoteData.shape);
+          }
         }
       } catch (err) {
         console.error("Error loading quote:", err);
@@ -61,10 +60,10 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
     };
 
     fetchQuote();
-  }, [quoteId, user]);
+  }, [quoteId, user]); // ✅ Added 'user' to dependency array
 
   const linkClasses = (isActive: boolean) =>
-    `flex items-center gap-2 font-semibold px-4 py-2 mb-2 rounded 
+    `flex items-center gap-2 font-semibold px-4 py-2 mb-2 rounded
      ${
        isActive
          ? "bg-orange-100 text-orange-600"
@@ -75,6 +74,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
     <div className="flex h-screen">
       {/* Sidebar */}
       <aside className="hidden lg:flex w-80 p-4 border-r bg-white flex-col justify-between h-screen">
+        {/* Top navigation */}
         <div>
           <Link href="/" className={linkClasses(pathname === "/")}>
             Dashboard
@@ -86,40 +86,60 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
             My Quotes
           </Link>
         </div>
-
+        {/* Bottom only on /new-task */}
         <div className="mt-4">
           {isNewTask && (
             <GetQuoteComponent
-              data={formData ?? undefined}
+              data={
+                formData
+                  ? {
+                      ...formData,
+                      status: formData.status as QuoteStatus,
+                    }
+                  : undefined
+              }
               quoteId={quoteId ?? undefined}
             />
           )}
         </div>
       </aside>
-
-      {!loading && shapeData !== null && (
-        <ShapeContext.Provider value={{ shapeData, setShapeData }}>
-          {children}
-        </ShapeContext.Provider>
-      )}
+      <main className="flex-1 flex flex-col bg-gray-100 overflow-hidden">
+        {!loading && (
+          <ShapeContext.Provider value={{ shapeData, setShapeData }}>
+            {children}
+          </ShapeContext.Provider>
+        )}
+      </main>
     </div>
   );
 }
 
-// Main layout component with Suspense wrapper
+// Loading fallback component
+function DashboardLoading() {
+  return (
+    <div className="flex h-screen">
+      <aside className="hidden lg:flex w-80 p-4 border-r bg-white">
+        <div className="animate-pulse">
+          <div className="h-4 bg-gray-200 rounded mb-4"></div>
+          <div className="h-4 bg-gray-200 rounded mb-4"></div>
+        </div>
+      </aside>
+      <main className="flex-1 flex flex-col bg-gray-100">
+        <div className="flex items-center justify-center h-full">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600"></div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <Suspense
-      fallback={
-        <div className="flex h-screen items-center justify-center">
-          Loading...
-        </div>
-      }
-    >
+    <Suspense fallback={<DashboardLoading />}>
       <DashboardContent>{children}</DashboardContent>
     </Suspense>
   );

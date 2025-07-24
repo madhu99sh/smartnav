@@ -10,7 +10,16 @@ import {
 } from "firebase/firestore";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { db, auth } from "../libs/firebase"; // adjust path to your Firebase setup
-import { QuoteData } from "@/app/(dashboard)/layout";
+
+export type QuoteData = {
+  id: string;
+  shape: string;
+  title: string;
+  description: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+};
 
 export default function useQuotes() {
   const [user, setUser] = useState<User | null>(null);
@@ -37,15 +46,16 @@ export default function useQuotes() {
           const docData = doc.data();
           return {
             id: doc.id,
-            shape: docData.shape,
+            shape: docData.shape ?? "",
             title: docData.title,
             description: docData.description,
             status: docData.status,
-            // add other fields from QuoteData if needed
+            createdAt: docData.createdAt ?? "",
+            updatedAt: docData.updatedAt ?? "",
           };
         });
 
-        setQuotes(data as QuoteData[]);
+        setQuotes(data);
       } catch (err) {
         console.error("Error fetching quotes:", err);
       } finally {

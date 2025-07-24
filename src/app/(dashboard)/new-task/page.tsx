@@ -65,7 +65,9 @@ export default function NewTaskPage() {
 
       {/* Page layout */}
       <div className="p-6 flex flex-col flex-1 h-[calc(100vh-64px)]">
-        <h2 className="text-2xl font-semibold">Hi {user?.displayName}</h2>
+        <h2 className="text-2xl text-black font-semibold">
+          Hi {user?.displayName}
+        </h2>
         <p className="text-gray-600 mb-4">
           Please continue by selecting{" "}
           <span className="font-bold">an area</span> on map
@@ -73,50 +75,46 @@ export default function NewTaskPage() {
 
         {/* Search + Toolbar */}
         <div className="flex flex-wrap items-center gap-2 mb-4">
-          <div className="flex items-center border rounded px-2 w-full sm:w-auto">
+          {/* Search Bar */}
+          <div className="flex items-center border border-gray-400 bg-white rounded px-2 w-full sm:w-auto">
             <input
               type="text"
               placeholder="Search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-              className="p-2 outline-none w-40 sm:w-60"
+              className="p-2 outline-none w-40 sm:w-60 placeholder-gray-500 text-gray-800 bg-white"
             />
             <button onClick={handleSearch}>
-              <BiSearch className="text-xl text-gray-500" />
+              <BiSearch className="text-xl text-gray-700" />
             </button>
           </div>
 
+          {/* Toolbar Buttons */}
           <div className="flex gap-2">
             <button
               onClick={() => window.__drawTools?.drawRectangle()}
-              className="p-2 border rounded hover:bg-gray-200"
+              className="p-2 border border-gray-400 bg-white rounded hover:bg-gray-200"
             >
-              <FaSquare />
+              <FaSquare className="text-gray-700" />
             </button>
             <button
               onClick={() => window.__drawTools?.drawPolygon()}
-              className="p-2 border rounded hover:bg-gray-200"
+              className="p-2 border border-gray-400 bg-white rounded hover:bg-gray-200"
             >
-              <FaDrawPolygon />
+              <FaDrawPolygon className="text-gray-700" />
             </button>
             <button
               onClick={() => window.__drawTools?.save()}
-              className="p-2 border rounded hover:bg-gray-200"
+              className="p-2 border border-gray-400 bg-white rounded hover:bg-gray-200"
             >
-              <FaSave />
+              <FaSave className="text-gray-700" />
             </button>
-            {/* <button  onClick={() => window.__drawTools?.drag()} className="p-2 border rounded hover:bg-gray-200">
-              <FaMousePointer/>
-            </button> */}
-            {/* <button onClick={() => window.__drawTools?.edit()}  className="p-2 border rounded hover:bg-gray-200">
-              <FaEdit />
-            </button> */}
             <button
               onClick={() => window.__drawTools?.clearAll()}
-              className="p-2 border rounded hover:bg-gray-200"
+              className="p-2 border border-gray-400 bg-white rounded hover:bg-gray-200"
             >
-              <FaTrash />
+              <FaTrash className="text-gray-700" />
             </button>
           </div>
         </div>

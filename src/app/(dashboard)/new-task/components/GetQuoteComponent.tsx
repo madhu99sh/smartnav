@@ -11,6 +11,7 @@ type QuoteData = {
   description: string;
   shape: string;
   status: QuoteStatus;
+  createdAt?: string;
 };
 
 export default function GetQuoteComponent({
@@ -64,6 +65,7 @@ export default function GetQuoteComponent({
     }
 
     try {
+      const now = new Date().toISOString();
       await addOrUpdateQuote({
         quote: {
           id: quoteId || "",
@@ -71,7 +73,8 @@ export default function GetQuoteComponent({
           description: desc,
           shape: JSON.stringify(shape),
           status,
-          [quoteId ? "updatedAt" : "createdAt"]: new Date().toISOString(),
+          createdAt: data?.createdAt || now,
+          updatedAt: now,
         },
         quoteId,
       });
@@ -95,21 +98,21 @@ export default function GetQuoteComponent({
 
   return (
     <div>
-      <h2 className="text-lg font-semibold mb-4">{`Create a new Quote ${
+      <h2 className="text-lg font-semibold mb-4 text-gray-800">{`Create a new Quote ${
         data ? `(${data?.status})` : ""
       }`}</h2>
 
       <input
         type="text"
         placeholder="Add title"
-        className="w-full border px-3 py-2 rounded mb-3 outline-none"
+        className="w-full border-2 border-gray-300 px-3 py-2 rounded mb-3 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200 text-gray-800 placeholder-gray-500 bg-white"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
 
       <textarea
         placeholder="Description"
-        className="w-full border px-3 py-2 rounded mb-4 resize-none outline-none h-24"
+        className="w-full border-2 border-gray-300 px-3 py-2 rounded mb-4 resize-none outline-none h-24 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 text-gray-800 placeholder-gray-500 bg-white"
         value={desc}
         onChange={(e) => setDesc(e.target.value)}
       />
@@ -118,7 +121,7 @@ export default function GetQuoteComponent({
         <button
           disabled={!hasShape}
           onClick={() => handleSubmit("draft")}
-          className={`flex-1 px-3 py-2 rounded font-bold text-white ${
+          className={`flex-1 px-3 py-2 rounded font-bold text-white transition-colors ${
             hasShape
               ? "bg-orange-500 hover:bg-orange-600"
               : "bg-gray-300 cursor-not-allowed"
@@ -128,7 +131,7 @@ export default function GetQuoteComponent({
         </button>
 
         <button
-          className="flex-1 border px-3 py-2 rounded font-bold text-gray-600 hover:bg-gray-100"
+          className="flex-1 border-2 border-gray-300 px-3 py-2 rounded font-bold text-gray-700 hover:bg-gray-100 bg-white transition-colors"
           onClick={() => router.push("/task-list")}
         >
           CANCEL
@@ -137,7 +140,7 @@ export default function GetQuoteComponent({
         <button
           disabled={!hasShape}
           onClick={() => handleSubmit("pending")}
-          className={`flex-1 px-3 py-2 rounded font-bold text-white ${
+          className={`flex-1 px-3 py-2 rounded font-bold text-white transition-colors ${
             hasShape
               ? "bg-orange-500 hover:bg-orange-600"
               : "bg-gray-300 cursor-not-allowed"
