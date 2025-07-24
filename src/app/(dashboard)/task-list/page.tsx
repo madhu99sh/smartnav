@@ -34,12 +34,14 @@ export default function MyQuotesPage() {
     <main className="p-6 bg-gray-100 min-h-screen">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h2 className="text-2xl font-semibold">Hi {user?.displayName}</h2>
+          <h2 className="text-2xl text-black font-semibold">
+            Hi {user?.displayName}
+          </h2>
           <p className="text-gray-600">Please find your quotes below</p>
         </div>
         <button
           onClick={() => router.push("/new-task")}
-          className="bg-orange-500 text-white font-bold px-4 py-2 rounded hover:bg-orange-600"
+          className="bg-orange-500 text-white font-bold px-4 py-2 rounded hover:bg-orange-60cre0"
         >
           + New Task
         </button>
