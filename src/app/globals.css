@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+:root {
+  --background: #000000;
+  --foreground: #ffffff;
+  --primary: #f37021;
+  --lightorrange: #ffdac9;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-space-grotesk);
+  --font-mono: var(--font-space-grotesk);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #000000;
+    --foreground: #ffffff;
+    --primary: #f37021;
+    --lightorrange: #ffdac9;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+}
+
+.oswald-text {
+  font-family: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+}
+
+.rounded-top-left-ellipse {
+  border-top-left-radius: 130% 100%;
+}
+
+.text-header {
+  color: var(--primary);
+}
+
+.bg-color {
+  background-color: var(--primary);
+}
+
+.bg-color-light {
+  background-color: var(--lightorrange);
+}
+
+.container-wide {
+  max-width: 1400px; /* or any custom width */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 768px) {
+  .container-wide {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
